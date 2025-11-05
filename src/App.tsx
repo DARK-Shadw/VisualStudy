@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import CourseGenerationPage from './pages/CourseGenerationPage';
 import CoursePage from './pages/CoursePage';
+import LessonPage from './pages/LessonPage';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/generate/:courseId" element={<CourseGenerationPage />} />
           <Route path="/course/:courseId" element={<CoursePage />} />
-          {/* Add more routes as needed */}
+          <Route path="/lesson/:lessonId" element={<LessonPage />} />
         </Routes>
       </div>
     </Router>
