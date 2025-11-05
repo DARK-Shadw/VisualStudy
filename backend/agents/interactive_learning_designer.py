@@ -136,34 +136,34 @@ Respond ONLY with valid JSON, no additional text."""
 
     def _get_fallback_design(self, concept: str, lesson: Dict[str, Any]) -> Dict[str, Any]:
         """Fallback design if LLM fails"""
-        return {{
+        return {
             "concept": concept,
             "visualization_type": "canvas_2d",
-            "main_interaction": {{
+            "main_interaction": {
                 "type": "slider",
                 "description": f"Explore {concept}",
-                "initial_state": {{"value": 0}},
+                "initial_state": {"value": 0},
                 "behavior": "Updates visualization in real-time"
-            }},
+            },
             "progressive_steps": [
-                {{
+                {
                     "step": 1,
                     "prompt": "Move the slider",
                     "interaction": "Adjust value",
                     "expected_discovery": "See how it changes"
-                }}
+                }
             ],
             "guidance_text": [
                 f"Try adjusting the values",
                 "What patterns do you notice?",
                 "Can you predict what happens next?"
             ],
-            "code_playground": {{
+            "code_playground": {
                 "enabled": False
-            }},
-            "implementation": {{
+            },
+            "implementation": {
                 "technology": "react-canvas",
                 "interactions": ["slider", "animation"],
                 "real_time_feedback": "Visual updates on interaction"
-            }}
-        }}
+            }
+        }
