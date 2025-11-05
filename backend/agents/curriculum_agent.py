@@ -2,10 +2,12 @@
 Curriculum Architect Agent
 Responsible for creating comprehensive learning paths
 """
-from crewai import Agent
 from typing import Dict, Any, Optional
 import json
+import logging
 from prompts.curriculum_prompts import CURRICULUM_ARCHITECT_PROMPT
+
+logger = logging.getLogger(__name__)
 
 class CurriculumArchitect:
     """Agent that designs comprehensive curriculum structures"""
@@ -18,22 +20,7 @@ class CurriculumArchitect:
             llm: Language model instance
         """
         self.llm = llm
-        self.agent = self._create_agent()
-
-    def _create_agent(self) -> Agent:
-        """Create the CrewAI agent"""
-        return Agent(
-            role='Curriculum Architect',
-            goal='Create comprehensive, progressive learning paths that engage students',
-            backstory="""You are an expert educator with 20 years of experience in curriculum
-            design. You've worked with leading educational institutions and have a deep
-            understanding of how people learn. You specialize in creating progressive learning
-            paths that build intuition and deep understanding. You're inspired by Brilliant.org's
-            approach to making complex topics accessible and engaging.""",
-            llm=self.llm,
-            verbose=True,
-            allow_delegation=False
-        )
+        logger.info("Curriculum Architect initialized")
 
     def create_curriculum(
         self,
@@ -59,6 +46,7 @@ class CurriculumArchitect:
         )
 
         try:
+            logger.info(f"Creating curriculum for topic: {topic}, difficulty: {difficulty}")
             response = self.llm.invoke(prompt)
             content = response.content if hasattr(response, 'content') else str(response)
 
@@ -71,16 +59,17 @@ class CurriculumArchitect:
                 content = '\n'.join(lines[1:-1])
 
             curriculum = json.loads(content)
+            logger.info(f"Successfully created curriculum with {len(curriculum.get('modules', []))} modules")
             return curriculum
 
         except json.JSONDecodeError as e:
-            print(f"Error parsing curriculum JSON: {e}")
-            print(f"Raw response: {content}")
+            logger.error(f"Error parsing curriculum JSON: {e}")
+            logger.error(f"Raw response: {content[:500]}...")  # Log first 500 chars
             # Return a basic structure if parsing fails
             return self._get_fallback_curriculum(topic, difficulty)
 
         except Exception as e:
-            print(f"Error creating curriculum: {e}")
+            logger.error(f"Error creating curriculum: {e}", exc_info=True)
             return self._get_fallback_curriculum(topic, difficulty)
 
     def _get_fallback_curriculum(self, topic: str, difficulty: str) -> Dict[str, Any]:
@@ -123,7 +112,3 @@ class CurriculumArchitect:
                 }
             ]
         }
-
-    def get_agent(self) -> Agent:
-        """Get the CrewAI agent instance"""
-        return self.agent

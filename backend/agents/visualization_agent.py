@@ -2,10 +2,12 @@
 Visualization Designer Agent
 Responsible for designing interactive visualizations
 """
-from crewai import Agent
+import logging
 from typing import Dict, Any, List
 import json
 from prompts.visualization_prompts import VISUALIZATION_DESIGNER_PROMPT
+
+logger = logging.getLogger(__name__)
 
 class VisualizationDesigner:
     """Agent that designs engaging interactive visualizations"""
@@ -18,23 +20,7 @@ class VisualizationDesigner:
             llm: Language model instance
         """
         self.llm = llm
-        self.agent = self._create_agent()
-
-    def _create_agent(self) -> Agent:
-        """Create the CrewAI agent"""
-        return Agent(
-            role='Visualization Designer',
-            goal='Design engaging, interactive visual experiences that make learning intuitive',
-            backstory="""You are a creative technologist specializing in educational technology
-            and data visualization. You have a background in UX design and interactive media.
-            You've created award-winning educational visualizations that make abstract concepts
-            tangible. You understand the power of interactive learning and create 'aha moment'
-            experiences. You're inspired by 3Blue1Brown's visual explanations and Brilliant.org's
-            interactive approach.""",
-            llm=self.llm,
-            verbose=True,
-            allow_delegation=False
-        )
+        logger.info("Visualization Designer initialized")
 
     def design_visualizations(self, curriculum: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -117,6 +103,3 @@ class VisualizationDesigner:
 
         return {"visualizations": visualizations}
 
-    def get_agent(self) -> Agent:
-        """Get the CrewAI agent instance"""
-        return self.agent

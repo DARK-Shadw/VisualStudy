@@ -8,6 +8,15 @@ from typing import Optional, List, Dict, Any
 import os
 from dotenv import load_dotenv
 import asyncio
+import logging
+import traceback
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -102,10 +111,12 @@ async def run_course_generation(course_id: str, topic: str, difficulty: str):
     Background task to run course generation workflow
     """
     try:
+        logger.info(f"Starting course generation for course_id: {course_id}, topic: {topic}")
         workflow = CourseGenerationWorkflow()
 
         # Update status callback
         def update_status(step: str, progress: int, message: str):
+            logger.info(f"Course {course_id} - {step}: {progress}% - {message}")
             course_generation_status[course_id].update({
                 "current_step": step,
                 "progress_percentage": progress,
@@ -113,11 +124,14 @@ async def run_course_generation(course_id: str, topic: str, difficulty: str):
             })
 
         # Run workflow
+        logger.info(f"Running workflow for course {course_id}")
         result = await workflow.run(
             topic=topic,
             difficulty=difficulty,
             status_callback=update_status
         )
+
+        logger.info(f"Course generation completed for {course_id}")
 
         # Update final status
         course_generation_status[course_id].update({
@@ -128,6 +142,8 @@ async def run_course_generation(course_id: str, topic: str, difficulty: str):
         })
 
     except Exception as e:
+        logger.error(f"Error generating course {course_id}: {str(e)}")
+        logger.error(traceback.format_exc())
         course_generation_status[course_id].update({
             "status": "failed",
             "messages": course_generation_status[course_id]["messages"] + [f"Error: {str(e)}"]

@@ -3,7 +3,6 @@ uvicorn[standard]==0.32.0
 python-dotenv==1.0.1
 pydantic==2.9.2
 setuptools>=70.0.0
-crewai==0.86.0
 langchain==0.3.7
 langchain-google-genai==2.0.5
 langchain-openai==0.2.9

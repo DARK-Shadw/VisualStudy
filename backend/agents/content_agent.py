@@ -2,11 +2,12 @@
 Content Developer Agent
 Responsible for creating lesson content and React components
 """
-from crewai import Agent
+import logging
 from typing import Dict, Any
 import json
 from prompts.content_prompts import CONTENT_DEVELOPER_PROMPT
 
+logger = logging.getLogger(__name__)
 class ContentDeveloper:
     """Agent that creates lesson content and interactive components"""
 
@@ -18,23 +19,8 @@ class ContentDeveloper:
             llm: Language model instance
         """
         self.llm = llm
-        self.agent = self._create_agent()
+        logger.info(f"{self.__class__.__name__} initialized")
 
-    def _create_agent(self) -> Agent:
-        """Create the CrewAI agent"""
-        return Agent(
-            role='Content Developer',
-            goal='Create clear, engaging lessons with working interactive components',
-            backstory="""You are a full-stack developer and technical writer with expertise
-            in React, TypeScript, and educational content creation. You've built interactive
-            learning platforms and have a talent for explaining complex concepts simply.
-            You write production-ready code that is clean, well-documented, and user-friendly.
-            You understand learning psychology and create content that builds intuition through
-            progressive disclosure and hands-on experimentation.""",
-            llm=self.llm,
-            verbose=True,
-            allow_delegation=False
-        )
 
     def generate_content(
         self,
@@ -193,6 +179,3 @@ export const {component_name}: React.FC<{component_name}Props> = () => {{
 export default {component_name};
 """
 
-    def get_agent(self) -> Agent:
-        """Get the CrewAI agent instance"""
-        return self.agent

@@ -2,11 +2,12 @@
 Assessment Creator Agent
 Responsible for creating engaging assessments and quizzes
 """
-from crewai import Agent
+import logging
 from typing import Dict, Any, List
 import json
 from prompts.assessment_prompts import ASSESSMENT_CREATOR_PROMPT
 
+logger = logging.getLogger(__name__)
 class AssessmentCreator:
     """Agent that creates effective learning assessments"""
 
@@ -18,22 +19,8 @@ class AssessmentCreator:
             llm: Language model instance
         """
         self.llm = llm
-        self.agent = self._create_agent()
+        logger.info(f"{self.__class__.__name__} initialized")
 
-    def _create_agent(self) -> Agent:
-        """Create the CrewAI agent"""
-        return Agent(
-            role='Assessment Creator',
-            goal='Design effective, engaging assessments that reinforce learning',
-            backstory="""You are an educational psychologist with a focus on formative
-            assessment and learning validation. You understand that assessments should be
-            learning experiences, not just tests. You create questions that build confidence,
-            provide immediate feedback, and guide learners toward deeper understanding.
-            You specialize in interactive assessments that make learning fun and rewarding.""",
-            llm=self.llm,
-            verbose=True,
-            allow_delegation=False
-        )
 
     def create_assessments(self, module: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -143,6 +130,3 @@ class AssessmentCreator:
             }
         }
 
-    def get_agent(self) -> Agent:
-        """Get the CrewAI agent instance"""
-        return self.agent
