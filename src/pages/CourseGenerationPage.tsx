@@ -81,15 +81,15 @@ const CourseGenerationPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-700/5 to-cyan-600/5 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center"
         >
           <div className="text-red-500 text-5xl mb-4">✗</div>
-          <h2 className="text-2xl font-bold text-text mb-4">Generation Failed</h2>
-          <p className="text-text-muted mb-6">{error}</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Generation Failed</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={() => navigate('/')}
             className="btn-primary"
@@ -102,7 +102,7 @@ const CourseGenerationPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-700/5 via-background to-cyan-600/5">
       <div className="container mx-auto px-4 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -112,12 +112,12 @@ const CourseGenerationPage: React.FC = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center mb-4">
-              <Sparkles className="w-10 h-10 text-primary animate-pulse" />
+              <Sparkles className="w-10 h-10 text-indigo-700 animate-pulse" />
             </div>
-            <h1 className="text-4xl font-bold mb-4 text-text">
+            <h1 className="text-4xl font-bold mb-4 text-gray-900">
               Creating Your Course
             </h1>
-            <p className="text-xl text-text-muted">
+            <p className="text-xl text-gray-600">
               Our AI agents are working together to build your personalized learning experience
             </p>
           </div>
@@ -126,16 +126,16 @@ const CourseGenerationPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-text">
+                <span className="text-sm font-medium text-gray-900">
                   {status?.current_step || 'Initializing...'}
                 </span>
-                <span className="text-sm font-medium text-primary">
+                <span className="text-sm font-medium text-indigo-700">
                   {status?.progress_percentage || 0}%
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-primary to-accent"
+                  className="h-full bg-gradient-to-r from-indigo-700 to-cyan-600"
                   initial={{ width: 0 }}
                   animate={{ width: `${status?.progress_percentage || 0}%` }}
                   transition={{ duration: 0.5 }}
@@ -164,7 +164,7 @@ const CourseGenerationPage: React.FC = () => {
               animate={{ opacity: 1 }}
               className="bg-white rounded-xl shadow-md p-6"
             >
-              <h3 className="font-semibold text-text mb-4">Activity Log</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Activity Log</h3>
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 <AnimatePresence>
                   {status.messages.slice().reverse().map((message, index) => (
@@ -173,9 +173,9 @@ const CourseGenerationPage: React.FC = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0 }}
-                      className="text-sm text-text-muted flex items-start gap-2"
+                      className="text-sm text-gray-600 flex items-start gap-2"
                     >
-                      <CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                       <span>{message}</span>
                     </motion.div>
                   ))}
@@ -203,10 +203,10 @@ const StepItem: React.FC<{
     >
       <div className="flex-shrink-0">
         {isComplete && (
-          <CheckCircle className="w-8 h-8 text-success" />
+          <CheckCircle className="w-8 h-8 text-green-500" />
         )}
         {isActive && (
-          <Loader className="w-8 h-8 text-primary animate-spin" />
+          <Loader className="w-8 h-8 text-indigo-700 animate-spin" />
         )}
         {isPending && (
           <Circle className="w-8 h-8 text-gray-300" />
@@ -215,8 +215,8 @@ const StepItem: React.FC<{
       <div className="flex-grow">
         <span
           className={`font-medium ${
-            isComplete ? 'text-success' :
-            isActive ? 'text-primary' :
+            isComplete ? 'text-green-500' :
+            isActive ? 'text-indigo-700' :
             'text-gray-400'
           }`}
         >

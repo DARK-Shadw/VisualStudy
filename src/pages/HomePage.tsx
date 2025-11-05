@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <motion.div
@@ -66,17 +66,17 @@ const HomePage: React.FC = () => {
           className="text-center mb-16"
         >
           <div className="flex items-center justify-center mb-6">
-            <Sparkles className="w-12 h-12 text-primary mr-3" />
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <Sparkles className="w-12 h-12 text-indigo-700 mr-3" />
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-indigo-700 to-cyan-600 bg-clip-text text-transparent">
               VisualStudy
             </h1>
           </div>
 
-          <p className="text-2xl text-text-muted mb-8 max-w-3xl mx-auto">
+          <p className="text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
             AI-powered interactive learning that makes complex topics
-            <span className="text-primary font-semibold"> visual</span>,
-            <span className="text-accent font-semibold"> engaging</span>, and
-            <span className="text-secondary font-semibold"> unforgettable</span>
+            <span className="text-indigo-700 font-semibold"> visual</span>,
+            <span className="text-cyan-600 font-semibold"> engaging</span>, and
+            <span className="text-purple-600 font-semibold"> unforgettable</span>
           </p>
 
           {/* Features */}
@@ -106,7 +106,7 @@ const HomePage: React.FC = () => {
             className="max-w-3xl mx-auto"
           >
             <div className="bg-white rounded-2xl shadow-2xl p-8 mb-8">
-              <h2 className="text-3xl font-bold mb-6 text-text">
+              <h2 className="text-3xl font-bold mb-6 text-gray-900">
                 What do you want to learn today?
               </h2>
 
@@ -122,7 +122,7 @@ const HomePage: React.FC = () => {
 
               {/* Difficulty Selection */}
               <div className="mb-6">
-                <label className="block text-sm font-medium mb-3 text-text">
+                <label className="block text-sm font-medium mb-3 text-gray-900">
                   Difficulty Level
                 </label>
                 <div className="flex gap-3 justify-center">
@@ -132,7 +132,7 @@ const HomePage: React.FC = () => {
                       onClick={() => setDifficulty(level)}
                       className={`px-6 py-2 rounded-lg font-medium transition-all ${
                         difficulty === level
-                          ? 'bg-primary text-white shadow-md'
+                          ? 'bg-indigo-700 text-white shadow-md'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                       disabled={isLoading}
@@ -170,7 +170,7 @@ const HomePage: React.FC = () => {
 
             {/* Example Topics */}
             <div className="text-left">
-              <h3 className="text-lg font-semibold mb-4 text-text">
+              <h3 className="text-lg font-semibold mb-4 text-gray-900">
                 Try one of these topics:
               </h3>
               <div className="flex flex-wrap gap-3">
@@ -181,7 +181,7 @@ const HomePage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 + index * 0.05 }}
                     onClick={() => handleExampleClick(exampleTopic)}
-                    className="px-4 py-2 bg-white rounded-full shadow-sm hover:shadow-md transition-all text-primary font-medium border border-primary/20 hover:border-primary/40"
+                    className="px-4 py-2 bg-white rounded-full shadow-sm hover:shadow-md transition-all text-indigo-700 font-medium border border-indigo-200 hover:border-indigo-400"
                     disabled={isLoading}
                   >
                     {exampleTopic}
@@ -206,9 +206,9 @@ const FeatureCard: React.FC<{
       whileHover={{ scale: 1.05 }}
       className="card text-center"
     >
-      <div className="text-primary mb-3 flex justify-center">{icon}</div>
-      <h3 className="font-bold text-lg mb-2 text-text">{title}</h3>
-      <p className="text-text-muted text-sm">{description}</p>
+      <div className="text-indigo-700 mb-3 flex justify-center">{icon}</div>
+      <h3 className="font-bold text-lg mb-2 text-gray-900">{title}</h3>
+      <p className="text-gray-600 text-sm">{description}</p>
     </motion.div>
   );
 };
