@@ -4,16 +4,18 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle } from 'lucide-react';
 import { useCourseStore } from '../store/courseStore';
 import { useProgressStore } from '../store/progressStore';
+import VisualizationRenderer from '../components/visualizations/VisualizationRenderer';
 
 const LessonPage: React.FC = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
-  const { currentCourse, lessons } = useCourseStore();
+  const { currentCourse, lessons, visualizations } = useCourseStore();
   const { setLessonProgress, completeLesson, lessonProgress } = useProgressStore();
 
   const [currentLesson, setCurrentLesson] = useState<any>(null);
   const [lessonContent, setLessonContent] = useState<any>(null);
   const [currentModule, setCurrentModule] = useState<any>(null);
+  const [lessonVisualization, setLessonVisualization] = useState<any>(null);
 
   useEffect(() => {
     if (!currentCourse || !lessonId) {
@@ -46,11 +48,15 @@ const LessonPage: React.FC = () => {
     const content = lessons.find((l: any) => l.lesson_id === lessonId);
     setLessonContent(content);
 
+    // Find visualization for this lesson
+    const viz = visualizations.find((v: any) => v.lesson_id === lessonId);
+    setLessonVisualization(viz);
+
     // Mark as in progress
     if (!lessonProgress[lessonId]) {
       setLessonProgress(lessonId, 10);
     }
-  }, [lessonId, currentCourse, lessons, navigate, lessonProgress, setLessonProgress]);
+  }, [lessonId, currentCourse, lessons, visualizations, navigate, lessonProgress, setLessonProgress]);
 
   const handleComplete = () => {
     if (lessonId) {
@@ -120,8 +126,8 @@ const LessonPage: React.FC = () => {
     );
   }
 
-  const isCompleted = lessonProgress[lessonId] === 100;
-  const progress = lessonProgress[lessonId] || 0;
+  const isCompleted = lessonId ? lessonProgress[lessonId] === 100 : false;
+  const progress = lessonId ? (lessonProgress[lessonId] || 0) : 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -183,81 +189,93 @@ const LessonPage: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Lesson Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white rounded-xl shadow-md p-8 mb-8"
-          >
-            {lessonContent ? (
-              <div className="prose max-w-none">
-                {/* Introduction */}
-                {lessonContent.content?.introduction && (
-                  <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3">Introduction</h2>
-                    <p className="text-gray-700 leading-relaxed">
-                      {lessonContent.content.introduction}
-                    </p>
-                  </div>
-                )}
-
-                {/* Main Explanation */}
-                {lessonContent.content?.main_explanation && (
-                  <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3">Understanding the Concept</h2>
-                    <div
-                      className="text-gray-700 leading-relaxed whitespace-pre-wrap"
-                      dangerouslySetInnerHTML={{ __html: lessonContent.content.main_explanation }}
-                    />
-                  </div>
-                )}
-
-                {/* Interactive Prompt */}
-                {lessonContent.content?.interactive_prompt && (
-                  <div className="mb-6 p-4 bg-cyan-50 border-l-4 border-cyan-600 rounded">
-                    <p className="text-cyan-900 font-medium">
-                      💡 {lessonContent.content.interactive_prompt}
-                    </p>
-                  </div>
-                )}
-
-                {/* Key Takeaways */}
-                {lessonContent.content?.key_takeaways && lessonContent.content.key_takeaways.length > 0 && (
-                  <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-3">Key Takeaways</h2>
-                    <ul className="list-disc list-inside space-y-2">
-                      {lessonContent.content.key_takeaways.map((takeaway: string, index: number) => (
-                        <li key={index} className="text-gray-700">
-                          {takeaway}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-600 mb-4">Content is being generated...</p>
-                <p className="text-sm text-gray-500">
-                  Lesson: {currentLesson.title}
-                </p>
-                <div className="mt-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Concepts Covered:</h3>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {currentLesson.concepts_covered?.map((concept: string, index: number) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
-                      >
-                        {concept}
-                      </span>
-                    ))}
+          {/* Interactive Visualization - MAIN CONTENT */}
+          {lessonVisualization ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-8"
+            >
+              <VisualizationRenderer
+                spec={lessonVisualization}
+                lessonId={lessonId || ''}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-xl shadow-md p-12 mb-8 text-center"
+            >
+              <div className="max-w-2xl mx-auto">
+                <div className="animate-pulse mb-6">
+                  <div className="w-24 h-24 bg-indigo-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <BookOpen className="w-12 h-12 text-indigo-700" />
                   </div>
                 </div>
+                <p className="text-xl text-gray-600 mb-4">
+                  Creating interactive visualization...
+                </p>
+                <p className="text-sm text-gray-500 mb-6">
+                  Your visual learning experience is being generated
+                </p>
+                {currentLesson.concepts_covered && currentLesson.concepts_covered.length > 0 && (
+                  <div className="mt-6">
+                    <p className="text-sm font-medium text-gray-700 mb-3">Concepts you'll explore:</p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {currentLesson.concepts_covered.map((concept: string, index: number) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
+                        >
+                          {concept}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </motion.div>
+            </motion.div>
+          )}
+
+          {/* Minimal Guidance Text */}
+          {lessonContent?.content?.interactive_prompt && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-gradient-to-r from-cyan-50 to-indigo-50 rounded-xl shadow-md p-6 mb-8 border-l-4 border-cyan-600"
+            >
+              <p className="text-lg text-gray-800 font-medium">
+                💡 {lessonContent.content.interactive_prompt}
+              </p>
+            </motion.div>
+          )}
+
+          {/* Key Takeaways - Compact */}
+          {lessonContent?.content?.key_takeaways && lessonContent.content.key_takeaways.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="bg-white rounded-xl shadow-md p-6 mb-8"
+            >
+              <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                Key Takeaways
+              </h3>
+              <ul className="space-y-2">
+                {lessonContent.content.key_takeaways.map((takeaway: string, index: number) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-indigo-700 mt-1">•</span>
+                    <span className="text-gray-700 text-sm">{takeaway}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
 
           {/* Navigation */}
           <div className="flex items-center justify-between">

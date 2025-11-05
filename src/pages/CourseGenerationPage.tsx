@@ -14,7 +14,6 @@ const CourseGenerationPage: React.FC = () => {
     setGenerationStatus,
     setIsGenerating,
     setCourseData,
-    currentCourse,
   } = useCourseStore();
 
   const [status, setStatus] = useState<GenerationStatus | null>(null);

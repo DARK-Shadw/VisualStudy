@@ -6,7 +6,7 @@ import { useCourseStore } from '../store/courseStore';
 import { useProgressStore } from '../store/progressStore';
 
 const CoursePage: React.FC = () => {
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseId: _courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   const { currentCourse } = useCourseStore();
   const { moduleProgress, completedModules } = useProgressStore();

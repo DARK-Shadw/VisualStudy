@@ -126,7 +126,7 @@ export const useProgressStore = create<ProgressState>()(
       },
 
       getTotalProgress: () => {
-        const { lessonProgress, completedLessons } = get();
+        const { lessonProgress } = get();
         const lessons = Object.keys(lessonProgress);
 
         if (lessons.length === 0) return 0;
