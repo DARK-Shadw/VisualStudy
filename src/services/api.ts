@@ -83,7 +83,7 @@ export const apiService = {
   async pollCourseGeneration(
     courseId: string,
     onProgress?: (status: GenerationStatus) => void,
-    maxAttempts: number = 60,
+    maxAttempts: number = 300, // 10 minutes at 2s intervals
     intervalMs: number = 2000
   ): Promise<any> {
     let attempts = 0;
@@ -111,7 +111,7 @@ export const apiService = {
 
         // Check if max attempts reached
         if (attempts >= maxAttempts) {
-          throw new Error('Course generation timeout');
+          throw new Error('Course generation timeout. The process may need more time - try again or check the backend logs.');
         }
 
         // Wait and poll again
